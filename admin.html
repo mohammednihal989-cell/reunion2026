@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | NEMS Reunion RSVPs</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="admin.js" defer></script>
+</head>
+<body style="padding-bottom: 60px;">
+
+  <!-- AMBIENT GLOWS -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- AUTH PASSCODE OVERLAY -->
+  <div class="modal-overlay active" id="authModal">
+    <div class="modal-card" style="text-align: center; max-width: 420px;">
+      <div class="eyebrow">Restricted Access</div>
+      <h2 class="gold-text" style="margin-bottom: 8px;">Admin Portal</h2>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px;">Please enter the admin passcode to access guest RSVPs.</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <input type="password" id="passcode" class="form-control" placeholder="Enter Admin Passcode" required style="text-align: center; font-size: 1.1rem; letter-spacing: 2px;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Unlock Dashboard</button>
+      </form>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 16px;">Passcode: <code style="color: var(--gold-light);">Thum2024</code></p>
+    </div>
+  </div>
+
+  <!-- ADMIN MAIN CONTENT (Hidden until authenticated) -->
+  <div class="container" id="adminContent" style="display: none; padding-top: 40px;">
+    
+    <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <div class="eyebrow">NEMS Batch 2024–2025</div>
+        <h1 class="gold-text">RSVP Dashboard</h1>
+      </div>
+      
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn-secondary" id="configUrlBtn">
+          <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Backend URL
+        </button>
+        <button class="btn btn-secondary" id="exportCsvBtn">
+          <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Export CSV
+        </button>
+        <a href="index.html" class="btn btn-secondary">View Site</a>
+      </div>
+    </header>
+
+    <!-- METRICS CARDS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-num" id="totalRsvpCount">0</div>
+        <div class="metric-title">Total Submissions</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="attendingCount" style="color: #2ecc71;">0</div>
+        <div class="metric-title">Confirmed Attending</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="gpayCount" style="color: var(--gold-light);">0</div>
+        <div class="metric-title">GPay Payments</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="cashCount" style="color: #3498db;">0</div>
+        <div class="metric-title">Cash Payments</div>
+      </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" id="filterAll" style="padding: 8px 16px; font-size: 0.85rem;">All</button>
+        <button class="btn btn-secondary" id="filterAttending" style="padding: 8px 16px; font-size: 0.85rem;">Attending</button>
+        <button class="btn btn-secondary" id="filterDeclined" style="padding: 8px 16px; font-size: 0.85rem;">Declined</button>
+      </div>
+
+      <div style="width: min(300px, 100%);">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by name or phone..." style="padding: 10px 14px; font-size: 0.85rem;">
+      </div>
+    </div>
+
+    <!-- RESPONSIVE GUEST TABLE -->
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Guest Name</th>
+            <th>Phone / WhatsApp</th>
+            <th>Status</th>
+            <th>Payment Method</th>
+            <th>Message / Notes</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody id="rsvpTableBody">
+          <tr>
+            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px;">Loading guest responses...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</body>
+</html>
