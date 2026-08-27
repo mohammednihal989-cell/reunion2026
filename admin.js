@@ -1,498 +1,1417 @@
 /* ==========================================================================
-   NEMS BATCH 2024-2025 REUNION CELEBRATION - ADMIN LOGIC
+   NEMS REUNION 2026
+   ADMIN DASHBOARD
    ========================================================================== */
 
-// ---------------------------------------------------------------------------
-// CONFIGURATION
-// ---------------------------------------------------------------------------
+
+/* --------------------------------------------------------------------------
+   CONFIGURATION
+--------------------------------------------------------------------------- */
 
 const GOOGLE_APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxdY3I7QLB94axMWn6V857CBIaKNKRbP4dSRBT4kMKGe9hM3qt-tYYdNPS2ZT2V_GPN/exec";
 
-const PASSCODE = "Thum2024";
+
+const PASSCODE =
+  "Thum2024";
+
 
 let rsvpData = [];
-let activeFilter = "ALL";
 
-document.addEventListener('DOMContentLoaded', () => {
-  initAuth();
-});
+let activeFilter =
+  "ALL";
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    initAuth();
+
+  }
+);
+
 
 /* --------------------------------------------------------------------------
-   1. AUTHENTICATION LOGIC
-   -------------------------------------------------------------------------- */
+   AUTHENTICATION
+--------------------------------------------------------------------------- */
+
 function initAuth() {
-  const loginForm = document.getElementById('loginForm');
-  const authModal = document.getElementById('authModal');
-  const adminContent = document.getElementById('adminContent');
 
-  if (sessionStorage.getItem('nems_admin_authed') === 'true') {
-    if (authModal) {
-      authModal.classList.remove('active');
-    }
+  const loginForm =
+    document.getElementById(
+      "loginForm"
+    );
 
-    if (adminContent) {
-      adminContent.style.display = 'block';
-    }
 
-    loadDashboardData();
-    initFilters();
+  if (
+    sessionStorage.getItem(
+      "nems_admin_authed"
+    ) === "true"
+  ) {
+
+    unlockDashboard();
+
   }
 
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
 
-      const input =
-        document.getElementById('passcode')?.value.trim() || '';
+  if (!loginForm) return;
 
-      if (input === PASSCODE) {
+
+  loginForm.addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+
+      const code =
+        document
+          .getElementById("passcode")
+          .value
+          .trim();
+
+
+      if (code === PASSCODE) {
+
         sessionStorage.setItem(
-          'nems_admin_authed',
-          'true'
+          "nems_admin_authed",
+          "true"
         );
 
-        if (authModal) {
-          authModal.classList.remove('active');
-        }
 
-        if (adminContent) {
-          adminContent.style.display = 'block';
-        }
-
-        loadDashboardData();
-        initFilters();
+        unlockDashboard();
 
       } else {
-        alert(
-          'Incorrect passcode! Please try again.'
-        );
-      }
-    });
-  }
-}
 
-/* --------------------------------------------------------------------------
-   2. LOAD DASHBOARD DATA
-   -------------------------------------------------------------------------- */
-async function loadDashboardData() {
-  const localData = JSON.parse(
-    localStorage.getItem('nems_rsvp_responses') || '[]'
+        alert(
+          "Incorrect passcode!"
+        );
+
+      }
+
+    }
   );
 
-  // Start with local backup
-  rsvpData = [...localData];
+}
+
+
+/* --------------------------------------------------------------------------
+   UNLOCK
+--------------------------------------------------------------------------- */
+
+function unlockDashboard() {
+
+  const auth =
+    document.getElementById(
+      "authModal"
+    );
+
+
+  const content =
+    document.getElementById(
+      "adminContent"
+    );
+
+
+  if (auth) {
+
+    auth.classList.remove(
+      "active"
+    );
+
+  }
+
+
+  if (content) {
+
+    content.style.display =
+      "block";
+
+  }
+
+
+  loadDashboardData();
+
+  initFilters();
+
+  initPhotoUpload();
+
+  loadAdminPhotos();
+
+}
+
+
+/* --------------------------------------------------------------------------
+   RSVP DATA
+--------------------------------------------------------------------------- */
+
+async function loadDashboardData() {
+
+  const localData =
+    JSON.parse(
+      localStorage.getItem(
+        "nems_rsvp_responses"
+      ) || "[]"
+    );
+
+
+  rsvpData =
+    [...localData];
+
 
   try {
-    const response = await fetch(
-      GOOGLE_APPS_SCRIPT_URL,
-      {
-        method: 'GET',
-        cache: 'no-store'
+
+    const response =
+      await fetch(
+        `${GOOGLE_APPS_SCRIPT_URL}?action=rsvps&_=${Date.now()}`,
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
+    }
+
+
+    const remote =
+      await response.json();
+
+
+    if (Array.isArray(remote)) {
+
+      rsvpData =
+        mergeResponses(
+          localData,
+          remote
+        );
+
+    }
+
+
+  } catch (error) {
+
+    console.warn(
+      "Remote RSVP loading failed:",
+      error
+    );
+
+  }
+
+
+  renderDashboard();
+
+}
+
+
+/* --------------------------------------------------------------------------
+   MERGE RSVP
+--------------------------------------------------------------------------- */
+
+function mergeResponses(
+  local,
+  remote
+) {
+
+  const map =
+    new Map();
+
+
+  local.forEach(item => {
+
+    const key =
+      `${item.fullName || ""}_${item.phone || ""}`;
+
+    map.set(
+      key,
+      item
+    );
+
+  });
+
+
+  remote.forEach(item => {
+
+    const key =
+      `${item.fullName || ""}_${item.phone || ""}`;
+
+    map.set(
+      key,
+      item
+    );
+
+  });
+
+
+  return Array.from(
+    map.values()
+  );
+
+}
+
+
+/* --------------------------------------------------------------------------
+   DASHBOARD
+--------------------------------------------------------------------------- */
+
+function renderDashboard() {
+
+  const query =
+    (
+      document
+        .getElementById("searchInput")
+        ?.value || ""
+    ).toLowerCase();
+
+
+  const filtered =
+    rsvpData.filter(
+      item => {
+
+        const matchesFilter =
+
+          activeFilter === "ALL" ||
+
+          (
+            activeFilter ===
+            "ATTENDING" &&
+            item.attendanceStatus ===
+            "Attending"
+          ) ||
+
+          (
+            activeFilter ===
+            "DECLINED" &&
+            item.attendanceStatus ===
+            "Declined"
+          );
+
+
+        const text =
+          [
+            item.fullName,
+            item.phone,
+            item.notes
+          ]
+            .join(" ")
+            .toLowerCase();
+
+
+        return (
+          matchesFilter &&
+          text.includes(query)
+        );
+
       }
     );
 
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error: ${response.status}`
-      );
-    }
 
-    const remoteData = await response.json();
+  updateMetrics();
 
-    if (Array.isArray(remoteData)) {
-      /*
-       * Google Sheet is the main source.
-       * Local data is merged only as a fallback
-       * for submissions that may exist locally.
-       */
-      rsvpData = mergeResponses(
-        localData,
-        remoteData
-      );
-    }
+  renderRsvpTable(
+    filtered
+  );
 
-  } catch (err) {
-    console.warn(
-      'Unable to fetch Google Sheet data:',
-      err
-    );
-  }
-
-  renderDashboard();
 }
 
+
 /* --------------------------------------------------------------------------
-   3. MERGE LOCAL + REMOTE DATA
-   -------------------------------------------------------------------------- */
-function mergeResponses(local, remote) {
-  const map = new Map();
+   METRICS
+--------------------------------------------------------------------------- */
 
-  local.forEach(item => {
-    const key =
-      `${item.fullName || ''}_${item.phone || ''}`;
+function updateMetrics() {
 
-    map.set(key, item);
-  });
+  const total =
+    rsvpData.length;
 
-  remote.forEach(item => {
-    const key =
-      `${item.fullName || ''}_${item.phone || ''}`;
 
-    // Remote data takes priority
-    map.set(key, item);
-  });
+  const attending =
+    rsvpData.filter(
+      item =>
+        item.attendanceStatus ===
+        "Attending"
+    ).length;
 
-  return Array.from(map.values());
+
+  const gpay =
+    rsvpData.filter(
+      item =>
+        String(
+          item.paymentMethod || ""
+        )
+          .toLowerCase()
+          .includes("gpay")
+    ).length;
+
+
+  const cash =
+    rsvpData.filter(
+      item =>
+        String(
+          item.paymentMethod || ""
+        )
+          .toLowerCase()
+          .includes("cash")
+    ).length;
+
+
+  document.getElementById(
+    "totalRsvpCount"
+  ).textContent =
+    total;
+
+
+  document.getElementById(
+    "attendingCount"
+  ).textContent =
+    attending;
+
+
+  document.getElementById(
+    "gpayCount"
+  ).textContent =
+    gpay;
+
+
+  document.getElementById(
+    "cashCount"
+  ).textContent =
+    cash;
+
 }
 
+
 /* --------------------------------------------------------------------------
-   4. RENDER DASHBOARD
-   -------------------------------------------------------------------------- */
-function renderDashboard() {
-  const tableBody =
-    document.getElementById('rsvpTableBody');
+   RSVP TABLE
+--------------------------------------------------------------------------- */
 
-  const searchInput =
-    document.getElementById('searchInput');
+function renderRsvpTable(
+  data
+) {
 
-  const query =
-    searchInput
-      ? searchInput.value.toLowerCase()
-      : '';
-
-  let filtered = rsvpData.filter(item => {
-
-    const matchesFilter =
-      activeFilter === "ALL" ||
-      (
-        activeFilter === "ATTENDING" &&
-        item.attendanceStatus === "Attending"
-      ) ||
-      (
-        activeFilter === "DECLINED" &&
-        item.attendanceStatus === "Declined"
-      );
-
-    const matchesQuery =
-      (item.fullName || '')
-        .toLowerCase()
-        .includes(query) ||
-
-      (item.phone || '')
-        .toLowerCase()
-        .includes(query) ||
-
-      (item.notes || '')
-        .toLowerCase()
-        .includes(query);
-
-    return matchesFilter && matchesQuery;
-  });
-
-  /* ------------------------------------------------------------------------
-     METRICS
-     ------------------------------------------------------------------------ */
-
-  const totalCount = rsvpData.length;
-
-  const attendingList =
-    rsvpData.filter(
-      i => i.attendanceStatus === "Attending"
+  const tbody =
+    document.getElementById(
+      "rsvpTableBody"
     );
 
-  const gpayCount =
-    rsvpData.filter(
-      i =>
-        (i.paymentMethod || 'GPay')
-          .toLowerCase()
-          .includes('gpay')
-    ).length;
 
-  const cashCount =
-    rsvpData.filter(
-      i =>
-        (i.paymentMethod || '')
-          .toLowerCase()
-          .includes('cash')
-    ).length;
+  if (!tbody) return;
 
-  const totalEl =
-    document.getElementById('totalRsvpCount');
 
-  const attendingEl =
-    document.getElementById('attendingCount');
+  if (!data.length) {
 
-  const gpayEl =
-    document.getElementById('gpayCount');
+    tbody.innerHTML = `
 
-  const cashEl =
-    document.getElementById('cashCount');
-
-  if (totalEl) {
-    totalEl.textContent = totalCount;
-  }
-
-  if (attendingEl) {
-    attendingEl.textContent =
-      attendingList.length;
-  }
-
-  if (gpayEl) {
-    gpayEl.textContent = gpayCount;
-  }
-
-  if (cashEl) {
-    cashEl.textContent = cashCount;
-  }
-
-  /* ------------------------------------------------------------------------
-     TABLE
-     ------------------------------------------------------------------------ */
-
-  if (!tableBody) return;
-
-  if (filtered.length === 0) {
-    tableBody.innerHTML = `
       <tr>
+
         <td
           colspan="7"
           style="
             text-align:center;
+            padding:40px;
             color:var(--text-muted);
-            padding:30px;
           "
         >
           No RSVP responses found.
         </td>
+
       </tr>
+
     `;
 
     return;
+
   }
 
-  tableBody.innerHTML =
-    filtered.map((item, idx) => {
 
-      const isAttending =
-        item.attendanceStatus === "Attending";
+  tbody.innerHTML =
+    data
+      .map(
+        (item, index) => {
 
-      const statusBadge =
-        isAttending
-          ? `<span class="badge badge-attending">Attending</span>`
-          : `<span class="badge badge-declined">Declined</span>`;
+          const attending =
+            item.attendanceStatus ===
+            "Attending";
 
-      return `
-        <tr>
 
-          <td>
-            ${idx + 1}
-          </td>
+          return `
 
-          <td style="font-weight:600;">
-            ${escapeHtml(
-        item.fullName || '-'
-      )}
-          </td>
+            <tr>
 
-          <td>
-            ${escapeHtml(
-        item.phone || '-'
-      )}
-          </td>
+              <td>
+                ${index + 1}
+              </td>
 
-          <td>
-            ${statusBadge}
-          </td>
+              <td
+                style="font-weight:600;"
+              >
+                ${escapeHtml(
+            item.fullName || "-"
+          )}
+              </td>
 
-          <td>
-            <span
-              style="
-                font-weight:600;
-                color:var(--gold-light);
-              "
-            >
-              ${escapeHtml(
-        item.paymentMethod || 'GPay'
-      )}
-            </span>
-          </td>
+              <td>
+                ${escapeHtml(
+            item.phone || "-"
+          )}
+              </td>
 
-          <td style="max-width:250px;">
-            ${escapeHtml(
-        item.notes || '-'
-      )}
-          </td>
+              <td>
 
-          <td
-            style="
-              color:var(--text-muted);
-              font-size:0.8rem;
-            "
-          >
-            ${escapeHtml(
-        item.timestamp || '-'
-      )}
-          </td>
+                <span
+                  class="badge ${attending
+              ? "badge-attending"
+              : "badge-declined"
+            }"
+                >
+                  ${escapeHtml(
+              item.attendanceStatus ||
+              "-"
+            )}
+                </span>
 
-        </tr>
-      `;
-    }).join('');
+              </td>
+
+              <td>
+
+                <span
+                  style="
+                    color:var(--gold-light);
+                    font-weight:600;
+                  "
+                >
+                  ${escapeHtml(
+              item.paymentMethod ||
+              "GPay"
+            )}
+                </span>
+
+              </td>
+
+              <td>
+                ${escapeHtml(
+              item.notes || "-"
+            )}
+              </td>
+
+              <td
+                style="
+                  color:var(--text-muted);
+                  font-size:.8rem;
+                "
+              >
+                ${escapeHtml(
+              item.timestamp || "-"
+            )}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
 }
 
-/* --------------------------------------------------------------------------
-   5. HTML ESCAPE
-   -------------------------------------------------------------------------- */
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
 
 /* --------------------------------------------------------------------------
-   6. FILTERS, SEARCH & CSV EXPORT
-   -------------------------------------------------------------------------- */
+   FILTERS
+--------------------------------------------------------------------------- */
+
 function initFilters() {
 
-  const filterAll =
-    document.getElementById('filterAll');
-
-  const filterAttending =
-    document.getElementById('filterAttending');
-
-  const filterDeclined =
-    document.getElementById('filterDeclined');
-
-  const searchInput =
-    document.getElementById('searchInput');
-
-  const exportCsvBtn =
-    document.getElementById('exportCsvBtn');
-
-  if (filterAll) {
-    filterAll.addEventListener(
-      'click',
-      () => {
-        activeFilter = "ALL";
-        renderDashboard();
-      }
+  const all =
+    document.getElementById(
+      "filterAll"
     );
-  }
 
-  if (filterAttending) {
-    filterAttending.addEventListener(
-      'click',
-      () => {
-        activeFilter = "ATTENDING";
-        renderDashboard();
-      }
-    );
-  }
 
-  if (filterDeclined) {
-    filterDeclined.addEventListener(
-      'click',
-      () => {
-        activeFilter = "DECLINED";
-        renderDashboard();
-      }
+  const attending =
+    document.getElementById(
+      "filterAttending"
     );
-  }
 
-  if (searchInput) {
-    searchInput.addEventListener(
-      'input',
-      () => {
-        renderDashboard();
-      }
-    );
-  }
 
-  if (exportCsvBtn) {
-    exportCsvBtn.addEventListener(
-      'click',
-      exportToCsv
+  const declined =
+    document.getElementById(
+      "filterDeclined"
     );
-  }
+
+
+  const search =
+    document.getElementById(
+      "searchInput"
+    );
+
+
+  const exportBtn =
+    document.getElementById(
+      "exportCsvBtn"
+    );
+
+
+  const refresh =
+    document.getElementById(
+      "refreshDashboardBtn"
+    );
+
+
+  all?.addEventListener(
+    "click",
+    () => {
+
+      activeFilter =
+        "ALL";
+
+      renderDashboard();
+
+    }
+  );
+
+
+  attending?.addEventListener(
+    "click",
+    () => {
+
+      activeFilter =
+        "ATTENDING";
+
+      renderDashboard();
+
+    }
+  );
+
+
+  declined?.addEventListener(
+    "click",
+    () => {
+
+      activeFilter =
+        "DECLINED";
+
+      renderDashboard();
+
+    }
+  );
+
+
+  search?.addEventListener(
+    "input",
+    renderDashboard
+  );
+
+
+  exportBtn?.addEventListener(
+    "click",
+    exportToCsv
+  );
+
+
+  refresh?.addEventListener(
+    "click",
+    async () => {
+
+      await loadDashboardData();
+
+      await loadAdminPhotos();
+
+    }
+  );
+
 }
 
+
 /* --------------------------------------------------------------------------
-   7. CSV EXPORT
-   -------------------------------------------------------------------------- */
+   CSV
+--------------------------------------------------------------------------- */
+
 function exportToCsv() {
 
-  if (rsvpData.length === 0) {
+  if (!rsvpData.length) {
+
     alert(
-      "No RSVP data available to export."
+      "No RSVP data available."
     );
 
     return;
+
   }
 
+
   const headers = [
+
     "Full Name",
+
     "Phone",
+
     "Status",
+
     "Payment Method",
+
     "Notes",
+
     "Submitted At"
+
   ];
 
+
   const rows =
-    rsvpData.map(i => [
+    rsvpData.map(
+      item => [
 
-      `"${(i.fullName || '')
-        .replace(/"/g, '""')}"`,
+        item.fullName || "",
 
-      `"${(i.phone || '')
-        .replace(/"/g, '""')}"`,
+        item.phone || "",
 
-      `"${(i.attendanceStatus || '')
-        .replace(/"/g, '""')}"`,
+        item.attendanceStatus || "",
 
-      `"${(i.paymentMethod || 'GPay')
-        .replace(/"/g, '""')}"`,
+        item.paymentMethod || "",
 
-      `"${(i.notes || '')
-        .replace(/"/g, '""')}"`,
+        item.notes || "",
 
-      `"${(i.timestamp || '')
-        .replace(/"/g, '""')}"`
-    ]);
+        item.timestamp || ""
 
-  const csvContent =
-    "data:text/csv;charset=utf-8," +
+      ]
+    );
+
+
+  const csv =
     [
-      headers.join(","),
-      ...rows.map(
-        r => r.join(",")
+      headers,
+      ...rows
+    ]
+      .map(
+        row =>
+          row
+            .map(
+              value =>
+                `"${String(value)
+                  .replace(/"/g, '""')}"`
+            )
+            .join(",")
       )
-    ].join("\n");
+      .join("\n");
 
-  const encodedUri =
-    encodeURI(csvContent);
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
 
   const link =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
-  link.setAttribute(
-    "href",
-    encodedUri
-  );
 
-  link.setAttribute(
-    "download",
+  link.href =
+    url;
+
+
+  link.download =
     `NEMS_Reunion_RSVPs_${new Date()
       .toISOString()
-      .slice(0, 10)}.csv`
-  );
+      .slice(0, 10)}.csv`;
 
-  document.body.appendChild(link);
 
   link.click();
 
-  document.body.removeChild(link);
+
+  URL.revokeObjectURL(
+    url
+  );
+
+}
+
+
+/* --------------------------------------------------------------------------
+   PHOTO UPLOAD
+--------------------------------------------------------------------------- */
+
+function initPhotoUpload() {
+
+  const input =
+    document.getElementById(
+      "photoInput"
+    );
+
+
+  if (!input) return;
+
+
+  input.addEventListener(
+    "change",
+    async event => {
+
+      const files =
+        Array.from(
+          event.target.files || []
+        );
+
+
+      if (!files.length) {
+        return;
+      }
+
+
+      await uploadPhotos(
+        files
+      );
+
+
+      input.value =
+        "";
+
+    }
+  );
+
+}
+
+
+/* --------------------------------------------------------------------------
+   UPLOAD MULTIPLE PHOTOS
+--------------------------------------------------------------------------- */
+
+async function uploadPhotos(
+  files
+) {
+
+  const status =
+    document.getElementById(
+      "uploadStatus"
+    );
+
+
+  const title =
+    document.getElementById(
+      "uploadStatusTitle"
+    );
+
+
+  const text =
+    document.getElementById(
+      "uploadStatusText"
+    );
+
+
+  const bar =
+    document.getElementById(
+      "uploadProgressBar"
+    );
+
+
+  status.style.display =
+    "block";
+
+
+  let completed =
+    0;
+
+
+  for (
+    const originalFile
+    of files
+  ) {
+
+    try {
+
+      title.textContent =
+        `Uploading ${originalFile.name}`;
+
+
+      const optimized =
+        await optimizeImage(
+          originalFile
+        );
+
+
+      const base64 =
+        await fileToBase64(
+          optimized
+        );
+
+
+      const payload = {
+
+        action:
+          "upload",
+
+        fileName:
+          originalFile.name,
+
+        mimeType:
+          optimized.type ||
+          "image/jpeg",
+
+        base64:
+          base64
+
+      };
+
+
+      await fetch(
+        GOOGLE_APPS_SCRIPT_URL,
+        {
+
+          method:
+            "POST",
+
+          mode:
+            "no-cors",
+
+          headers: {
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+      completed++;
+
+
+      const percent =
+        Math.round(
+          (completed /
+            files.length) *
+          100
+        );
+
+
+      bar.style.width =
+        `${percent}%`;
+
+
+      text.textContent =
+        `${completed} / ${files.length} uploaded`;
+
+    } catch (error) {
+
+      console.error(
+        "Photo upload failed:",
+        error
+      );
+
+    }
+
+  }
+
+
+  title.textContent =
+    "Upload complete";
+
+
+  text.textContent =
+    `${completed} of ${files.length} photos uploaded`;
+
+
+  setTimeout(
+    () => {
+
+      status.style.display =
+        "none";
+
+    },
+    2000
+  );
+
+
+  await loadAdminPhotos();
+
+}
+
+
+/* --------------------------------------------------------------------------
+   IMAGE OPTIMIZATION
+--------------------------------------------------------------------------- */
+
+function optimizeImage(
+  file
+) {
+
+  return new Promise(
+    resolve => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        event => {
+
+          const image =
+            new Image();
+
+
+          image.onload =
+            () => {
+
+              const maxSize =
+                2200;
+
+
+              let width =
+                image.width;
+
+
+              let height =
+                image.height;
+
+
+              if (
+                width >
+                maxSize ||
+                height >
+                maxSize
+              ) {
+
+                if (
+                  width >
+                  height
+                ) {
+
+                  height =
+                    Math.round(
+                      height *
+                      (maxSize /
+                        width)
+                    );
+
+                  width =
+                    maxSize;
+
+                } else {
+
+                  width =
+                    Math.round(
+                      width *
+                      (maxSize /
+                        height)
+                    );
+
+                  height =
+                    maxSize;
+
+                }
+
+              }
+
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+
+              canvas.width =
+                width;
+
+
+              canvas.height =
+                height;
+
+
+              const context =
+                canvas.getContext(
+                  "2d"
+                );
+
+
+              context.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+              );
+
+
+              canvas.toBlob(
+                blob => {
+
+                  resolve(blob);
+
+                },
+                "image/jpeg",
+                0.85
+              );
+
+            };
+
+
+          image.src =
+            event.target.result;
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* --------------------------------------------------------------------------
+   FILE → BASE64
+--------------------------------------------------------------------------- */
+
+function fileToBase64(
+  file
+) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => {
+
+          const result =
+            reader.result;
+
+
+          resolve(
+            String(result)
+              .split(",")[1]
+          );
+
+        };
+
+
+      reader.onerror =
+        reject;
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* --------------------------------------------------------------------------
+   LOAD ADMIN PHOTOS
+--------------------------------------------------------------------------- */
+
+async function loadAdminPhotos() {
+
+  const gallery =
+    document.getElementById(
+      "adminPhotoGallery"
+    );
+
+
+  if (!gallery) return;
+
+
+  gallery.innerHTML = `
+
+    <div
+      class="gallery-status"
+    >
+
+      <div class="gallery-loader"></div>
+
+      <p>
+        Loading photos...
+      </p>
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${GOOGLE_APPS_SCRIPT_URL}?action=gallery&_=${Date.now()}`,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    const photos =
+      Array.isArray(result)
+        ? result
+        : result.photos || [];
+
+
+    if (!photos.length) {
+
+      gallery.innerHTML = `
+
+        <div
+          class="gallery-empty"
+          style="
+            grid-column:1/-1;
+          "
+        >
+
+          <div class="gallery-empty-icon">
+            📸
+          </div>
+
+          <h3>
+            No Photos Uploaded
+          </h3>
+
+          <p>
+            Click ＋ Upload Photos to add reunion memories.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    gallery.innerHTML =
+      photos
+        .map(
+          photo => `
+
+            <article
+              class="admin-photo-card"
+            >
+
+              <img
+                src="${escapeAttribute(
+            photo.url
+          )}"
+                alt="${escapeAttribute(
+            photo.name
+          )}"
+                loading="lazy"
+              >
+
+
+              <div
+                class="admin-photo-info"
+              >
+
+                <div
+                  class="admin-photo-name"
+                >
+                  ${escapeHtml(
+            photo.name ||
+            "Photo"
+          )}
+                </div>
+
+
+                <button
+                  class="delete-photo-btn"
+                  onclick="deletePhoto(
+                    '${escapeAttribute(
+            photo.id
+          )}'
+                  )"
+                >
+                  🗑 Delete
+                </button>
+
+              </div>
+
+            </article>
+
+          `
+        )
+        .join("");
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load photos:",
+      error
+    );
+
+
+    gallery.innerHTML = `
+
+      <div
+        class="gallery-empty"
+        style="
+          grid-column:1/-1;
+        "
+      >
+
+        <h3>
+          Unable to load gallery
+        </h3>
+
+        <p>
+          Check your Apps Script deployment.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* --------------------------------------------------------------------------
+   DELETE PHOTO
+--------------------------------------------------------------------------- */
+
+async function deletePhoto(
+  fileId
+) {
+
+  if (
+    !confirm(
+      "Delete this photo permanently?"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    await fetch(
+      GOOGLE_APPS_SCRIPT_URL,
+      {
+
+        method:
+          "POST",
+
+        mode:
+          "no-cors",
+
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "delete",
+
+            fileId
+
+          })
+
+      }
+    );
+
+
+    alert(
+      "Photo deleted."
+    );
+
+
+    await loadAdminPhotos();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Unable to delete photo."
+    );
+
+  }
+
+}
+
+
+/* --------------------------------------------------------------------------
+   ESCAPE
+--------------------------------------------------------------------------- */
+
+function escapeHtml(
+  value
+) {
+
+  return String(value || "")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHtml(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
+
 }

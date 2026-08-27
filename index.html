@@ -1,359 +1,791 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Reunion Celebration 2026 | NEMS Batch 2024–2025</title>
-  
-  <!-- SEO & Social Meta Tags -->
-  <meta name="description" content="Official Reunion Celebration Web Invitation for NEMS Batch 2024-2025 at MIZHI, Karuvarakundu on Saturday, 29 August 2026. RSVP now!">
+
+  <meta name="description"
+    content="Official Reunion Celebration Web Invitation for NEMS Batch 2024-2025 at MIZHI, Karuvarakundu on Saturday, 29 August 2026.">
+
   <meta property="og:title" content="Reunion Celebration | NEMS Batch 2024–2025">
-  <meta property="og:description" content="Join us for three unforgettable moments at Mizhi, Karuvarakundu. Saturday, 29 August 2026 at 1:30 PM.">
+
+  <meta property="og:description" content="Join us for the NEMS Batch 2024–2025 Reunion Celebration.">
+
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/poster.png">
-  
-  <!-- Stylesheets -->
+
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Canvas Confetti Library for RSVP celebration -->
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-  <!-- Main Application Script -->
+
   <script src="script.js" defer></script>
 </head>
+
 <body>
 
-  <!-- Ambient Glow Backgrounds -->
+  <!-- =========================================================
+       AMBIENT BACKGROUND
+  ========================================================== -->
+
   <div class="ambient-glow glow-1"></div>
   <div class="ambient-glow glow-2"></div>
 
-  <!-- Top Nav Floating Admin Shortcut -->
+
+  <!-- =========================================================
+       ADMIN SHORTCUT
+  ========================================================== -->
+
   <div class="top-nav-bar">
-    <a href="admin.html" target="_blank" class="admin-login-btn" title="Admin Portal Login">
-      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+
+    <a href="admin.html" target="_blank" class="admin-login-btn" title="Admin Portal">
+
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+
       <span>Admin Login</span>
+
     </a>
+
   </div>
 
-  <!-- HERO SECTION -->
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+
   <header class="hero" id="hero">
+
     <div class="hero-poster-wrapper" id="openPosterLightbox" title="Click to view full poster image">
+
       <img src="assets/poster.png" alt="NEMS Batch 2024-2025 Reunion Celebration Poster">
+
       <div class="hero-poster-overlay">
+
         <div class="zoom-badge">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+          </svg>
+
           View Full Poster
+
         </div>
+
       </div>
+
     </div>
+
 
     <div class="scroll-hint">
+
       Scroll to explore
+
       <div class="scroll-mouse"></div>
+
     </div>
+
   </header>
 
-  <!-- COUNTDOWN SECTION -->
+
+  <!-- =========================================================
+       COUNTDOWN
+  ========================================================== -->
+
   <section class="countdown-section" id="countdown">
+
     <div class="container">
-      <div class="eyebrow">The Countdown Begins</div>
-      <h2 class="gold-text">Reunion In Sight</h2>
+
+      <div class="eyebrow">
+        The Countdown Begins
+      </div>
+
+      <h2 class="gold-text">
+        Reunion In Sight
+      </h2>
+
+
       <div class="countdown-grid">
+
         <div class="time-card">
           <div class="time-value" id="days">00</div>
           <div class="time-label">Days</div>
         </div>
+
         <div class="time-card">
           <div class="time-value" id="hours">00</div>
           <div class="time-label">Hours</div>
         </div>
+
         <div class="time-card">
           <div class="time-value" id="minutes">00</div>
           <div class="time-label">Minutes</div>
         </div>
+
         <div class="time-card">
           <div class="time-value" id="seconds">00</div>
           <div class="time-label">Seconds</div>
         </div>
+
       </div>
+
     </div>
+
   </section>
 
-  <!-- PROGRAM TIMELINE SECTION -->
+
+  <!-- =========================================================
+       PROGRAMS
+  ========================================================== -->
+
   <main class="programs-section" id="programs">
+
     <div class="container">
+
       <div class="section-header">
-        <div class="eyebrow">NEMS Batch 2024–2025</div>
-        <h2>The Programs</h2>
-        <p>Three moments. One unforgettable reunion.</p>
+
+        <div class="eyebrow">
+          NEMS Batch 2024–2025
+        </div>
+
+        <h2>
+          The Programs
+        </h2>
+
+        <p>
+          Three moments. One unforgettable reunion.
+        </p>
+
       </div>
+
 
       <div class="program-cards-grid">
-        <!-- Program 1 -->
+
+
+        <!-- PROGRAM 01 -->
+
         <article class="program-card">
+
           <div>
-            <div class="card-num">PROGRAM 01</div>
-            <h3>RECONNECT</h3>
-            <p>Catch up with old friends and relive our cherished memories.</p>
+
+            <div class="card-num">
+              PROGRAM 01
+            </div>
+
+            <h3>
+              RECONNECT
+            </h3>
+
+            <p>
+              Catch up with old friends and relive our cherished memories.
+            </p>
+
           </div>
+
+
           <div class="program-meta">
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              <span>Ice-breaking Session</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+
+              <span>
+                Ice-breaking Session
+              </span>
+
             </div>
+
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-              <span>Memory Sharing</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+
+              <span>
+                Memory Sharing
+              </span>
+
             </div>
+
           </div>
+
         </article>
 
-        <!-- Program 2 -->
+
+        <!-- PROGRAM 02 -->
+
         <article class="program-card">
+
           <div>
-            <div class="card-num">PROGRAM 02</div>
-            <h3>CELEBRATE</h3>
-            <p>Enjoy games, music, and activities that bring out the fun in us.</p>
+
+            <div class="card-num">
+              PROGRAM 02
+            </div>
+
+            <h3>
+              CELEBRATE
+            </h3>
+
+            <p>
+              Enjoy games, music, and activities that bring out the fun in us.
+            </p>
+
           </div>
+
+
           <div class="program-meta">
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>Fun Games</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+              </svg>
+
+              <span>
+                Fun Games
+              </span>
+
             </div>
+
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
-              <span>Music & Dance</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+
+              </svg>
+
+              <span>
+                Music & Dance
+              </span>
+
             </div>
+
           </div>
+
         </article>
 
-        <!-- Program 3 -->
+
+        <!-- PROGRAM 03 -->
+
         <article class="program-card">
+
           <div>
-            <div class="card-num">PROGRAM 03</div>
-            <h3>CREATE MEMORIES</h3>
-            <p>Capture new moments and make this day unforgettable.</p>
+
+            <div class="card-num">
+              PROGRAM 03
+            </div>
+
+            <h3>
+              CREATE MEMORIES
+            </h3>
+
+            <p>
+              Capture new moments and make this day unforgettable.
+            </p>
+
           </div>
+
+
           <div class="program-meta">
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span>Group Photoshoot</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+
+              </svg>
+
+              <span>
+                Group Photoshoot
+              </span>
+
             </div>
+
+
             <div class="meta-item">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              <span>Memory Wall</span>
+
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+
+              </svg>
+
+              <span>
+                Memory Wall
+              </span>
+
             </div>
+
           </div>
+
         </article>
+
       </div>
+
     </div>
+
   </main>
 
-  <!-- EVENT LOCATION & ACTIONS -->
-  <section class="details-section" id="location">
+
+  <!-- =========================================================
+       EVENT PHOTOS
+  ========================================================== -->
+
+  <section class="gallery-section" id="eventPhotos">
+
     <div class="container">
-      <div class="location-box">
-        <div class="eyebrow">Date & Location</div>
-        <h2 class="gold-text">Saturday, 29 August 2026</h2>
-        <div class="venue-tag">MIZHI, KARUVARAKUNDU · 1:30 PM Onwards</div>
-        <p style="color: var(--text-sub); max-width: 600px; margin: 0 auto;">We look forward to seeing everyone there! Click below to open directions or add the event directly to your calendar.</p>
-        
-        <div class="actions-row">
-          <a href="https://maps.google.com/?q=MIZHI+Karuvarakundu" target="_blank" rel="noopener" class="btn btn-secondary">
-            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Get Directions
-          </a>
-          <button id="addToCalBtn" class="btn btn-secondary">
-            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            Add to Calendar
-          </button>
-          <button id="shareBtn" class="btn btn-secondary">
-            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 100-5.367 3 3 0 000 5.367zm0 8.484a3 3 0 100-5.367 3 3 0 000 5.367z"/></svg>
-            Share Invitation
-          </button>
+
+      <div class="section-header">
+
+        <div class="eyebrow">
+          Captured Moments
         </div>
+
+        <h2 class="gold-text">
+          Event Photos
+        </h2>
+
+        <p>
+          Relive the moments from our reunion.
+        </p>
+
       </div>
+
+
+      <!-- LOADING -->
+
+      <div id="galleryLoading" class="gallery-status">
+
+        <div class="gallery-loader"></div>
+
+        <p>
+          Loading memories...
+        </p>
+
+      </div>
+
+
+      <!-- EMPTY -->
+
+      <div id="galleryEmpty" class="gallery-empty" style="display:none;">
+
+        <div class="gallery-empty-icon">
+          📸
+        </div>
+
+        <h3>
+          Photos Coming Soon
+        </h3>
+
+        <p>
+          Event photos will appear here after the celebration.
+        </p>
+
+      </div>
+
+
+      <!-- GALLERY -->
+
+      <div id="photoGallery" class="photo-gallery"></div>
+
     </div>
+
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
+
+  <!-- =========================================================
+       EVENT LOCATION
+  ========================================================== -->
+
+  <section class="details-section" id="location">
+
     <div class="container">
-      <div class="eyebrow">NEMS Batch 2024–2025</div>
-      <h3 class="gold-text">See You at the Reunion</h3>
-      <p>Reunion Celebration · 29 August · 1:30 PM onwards</p>
-      <div class="footer-nav">
-        <a href="#hero">Top</a>
-        <a href="#programs">Programs</a>
-        <a href="#location">Venue</a>
-        <a href="admin.html" target="_blank">Admin Portal</a>
+
+      <div class="location-box">
+
+        <div class="eyebrow">
+          Date & Location
+        </div>
+
+        <h2 class="gold-text">
+          Saturday, 29 August 2026
+        </h2>
+
+        <div class="venue-tag">
+          MIZHI, KARUVARAKUNDU · 1:30 PM Onwards
+        </div>
+
+        <p style="
+            color:var(--text-sub);
+            max-width:600px;
+            margin:0 auto;
+          ">
+          We look forward to seeing everyone there!
+          Click below to open directions or add the event
+          directly to your calendar.
+        </p>
+
+
+        <div class="actions-row">
+
+          <a href="https://maps.google.com/?q=MIZHI+Karuvarakundu" target="_blank" rel="noopener"
+            class="btn btn-secondary">
+
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+
+            </svg>
+
+            Get Directions
+
+          </a>
+
+
+          <button id="addToCalBtn" class="btn btn-secondary">
+
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+
+            </svg>
+
+            Add to Calendar
+
+          </button>
+
+
+          <button id="shareBtn" class="btn btn-secondary">
+
+            Share Invitation
+
+          </button>
+
+        </div>
+
       </div>
+
     </div>
+
+  </section>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+
+  <footer class="footer">
+
+    <div class="container">
+
+      <div class="eyebrow">
+        NEMS Batch 2024–2025
+      </div>
+
+      <h3 class="gold-text">
+        See You at the Reunion
+      </h3>
+
+      <p>
+        Reunion Celebration · 29 August · 1:30 PM onwards
+      </p>
+
+
+      <div class="footer-nav">
+
+        <a href="#hero">
+          Top
+        </a>
+
+        <a href="#programs">
+          Programs
+        </a>
+
+        <a href="#eventPhotos">
+          Photos
+        </a>
+
+        <a href="#location">
+          Venue
+        </a>
+
+        <a href="admin.html" target="_blank">
+          Admin Portal
+        </a>
+
+      </div>
+
+    </div>
+
   </footer>
 
-  <!-- STICKY FLOATING RSVP BUTTON BAR -->
+
+  <!-- =========================================================
+       FLOATING BAR
+  ========================================================== -->
+
   <div class="floating-rsvp-bar">
+
     <button class="btn btn-primary" id="openRsvpBtn">
-      <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+
       RSVP NOW
+
     </button>
-    <a href="admin.html" target="_blank" class="btn btn-secondary" style="padding: 10px 18px; font-size: 0.85rem;" title="Admin Dashboard">
-      <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      Admin
+
+
+    <a href="#eventPhotos" class="btn btn-secondary" style="
+        padding:10px 18px;
+        font-size:.85rem;
+      ">
+
+      📸 Photos
+
     </a>
+
+
+    <a href="admin.html" target="_blank" class="btn btn-secondary" style="
+        padding:10px 18px;
+        font-size:.85rem;
+      ">
+
+      🔒 Admin
+
+    </a>
+
   </div>
 
-  <!-- RSVP MODAL -->
+
+  <!-- =========================================================
+       RSVP MODAL
+  ========================================================== -->
+
   <div class="modal-overlay" id="rsvpModal">
+
     <div class="modal-card">
-      <button class="close-btn" id="closeRsvpBtn" aria-label="Close RSVP Modal">&times;</button>
-      <div style="text-align: center; margin-bottom: 24px;">
-        <div class="eyebrow">Confirm Attendance</div>
-        <h2 class="gold-text">Reunion RSVP</h2>
-        <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">Please let us know if you will be joining the celebration!</p>
+
+      <button class="close-btn" id="closeRsvpBtn" aria-label="Close RSVP Modal">
+        &times;
+      </button>
+
+
+      <div style="
+          text-align:center;
+          margin-bottom:24px;
+        ">
+
+        <div class="eyebrow">
+          Confirm Attendance
+        </div>
+
+        <h2 class="gold-text">
+          Reunion RSVP
+        </h2>
+
+        <p style="
+            font-size:.85rem;
+            color:var(--text-sub);
+            margin-top:6px;
+          ">
+          Please let us know if you will be joining the celebration!
+        </p>
+
       </div>
+
 
       <form id="rsvpForm">
-        <div class="form-group">
-          <label for="fullName">Full Name *</label>
-          <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Rahul Sharma" required>
-        </div>
 
         <div class="form-group">
-          <label for="phone">Phone / WhatsApp Number *</label>
+
+          <label for="fullName">
+            Full Name *
+          </label>
+
+          <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Rahul Sharma"
+            required>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="phone">
+            Phone / WhatsApp Number *
+          </label>
+
           <input type="tel" id="phone" name="phone" class="form-control" placeholder="e.g. +91 9876543210" required>
+
         </div>
 
+
         <div class="form-group">
-          <label>Are You Attending? *</label>
+
+          <label>
+            Are You Attending? *
+          </label>
+
           <div class="radio-group">
+
             <div class="radio-card">
+
               <input type="radio" id="attendingYes" name="attendanceStatus" value="Attending" checked>
-              <label for="attendingYes">Yes, Attending! 🎉</label>
+
+              <label for="attendingYes">
+                Yes, Attending! 🎉
+              </label>
+
             </div>
+
+
             <div class="radio-card">
+
               <input type="radio" id="attendingNo" name="attendanceStatus" value="Declined">
-              <label for="attendingNo">Sorry, Can't Make It 😢</label>
+
+              <label for="attendingNo">
+                Sorry, Can't Make It 😢
+              </label>
+
             </div>
+
           </div>
+
         </div>
 
+
         <div class="form-group">
-          <label>Payment Method *</label>
+
+          <label>
+            Payment Method *
+          </label>
+
           <div class="radio-group">
+
             <div class="radio-card">
+
               <input type="radio" id="payGpay" name="paymentMethod" value="GPay" checked>
-              <label for="payGpay">💳 GPay (Google Pay)</label>
+
+              <label for="payGpay">
+                💳 GPay
+              </label>
+
             </div>
+
+
             <div class="radio-card">
+
               <input type="radio" id="payCash" name="paymentMethod" value="Cash">
-              <label for="payCash">💵 Cash</label>
+
+              <label for="payCash">
+                💵 Cash
+              </label>
+
             </div>
+
           </div>
+
         </div>
+
 
         <div class="form-group">
-          <label for="notes">Special Message or Memory to Share</label>
-          <textarea id="notes" name="notes" class="form-control" placeholder="Write a short message for the batch..."></textarea>
+
+          <label for="notes">
+            Special Message or Memory to Share
+          </label>
+
+          <textarea id="notes" name="notes" class="form-control"
+            placeholder="Write a short message for the batch..."></textarea>
+
         </div>
 
-        <button type="submit" id="submitRsvpBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+
+        <button type="submit" id="submitRsvpBtn" class="btn btn-primary" style="
+            width:100%;
+            margin-top:10px;
+          ">
           Submit RSVP
         </button>
+
       </form>
+
     </div>
+
   </div>
 
-  <!-- LIGHTBOX MODAL FOR POSTER IMAGE -->
+
+  <!-- =========================================================
+       POSTER LIGHTBOX
+  ========================================================== -->
+
   <div class="modal-overlay" id="posterModal">
+
     <div class="modal-card lightbox-card">
-      <button class="close-btn" id="closePosterBtn">&times;</button>
+
+      <button class="close-btn" id="closePosterBtn">
+        &times;
+      </button>
+
       <img src="assets/poster.png" alt="Full NEMS Reunion Poster">
+
     </div>
+
   </div>
 
-  <!-- EMBEDDED ADMIN DASHBOARD MODAL ON MAIN PAGE -->
-  <div class="modal-overlay" id="embeddedAdminModal">
-    <div class="modal-card" style="width: min(900px, 95vw); max-height: 88vh;">
-      <button class="close-btn" id="closeEmbeddedAdminBtn" aria-label="Close Admin Modal">&times;</button>
-      
-      <!-- AUTH SCREEN inside Modal -->
-      <div id="modalAuthScreen" style="text-align: center; padding: 20px 0;">
-        <div class="eyebrow">Restricted Access</div>
-        <h2 class="gold-text" style="margin-bottom: 8px;">Admin Dashboard</h2>
-        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px;">Enter passcode to view guest RSVPs on this page.</p>
-        
-        <form id="modalLoginForm" style="max-width: 360px; margin: 0 auto;">
-          <div class="form-group">
-            <input type="password" id="modalPasscode" class="form-control" placeholder="Enter Admin Passcode" required style="text-align: center; font-size: 1.1rem; letter-spacing: 2px;">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Unlock Dashboard</button>
-        </form>
-      </div>
 
-      <!-- DASHBOARD SCREEN inside Modal -->
-      <div id="modalDashboardScreen" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <div class="eyebrow">NEMS Reunion 2026</div>
-            <h2 class="gold-text" style="font-size: 1.8rem;">Guest RSVPs</h2>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary" id="modalExportCsvBtn" style="padding: 8px 16px; font-size: 0.85rem;">
-              Export CSV
-            </button>
-            <a href="admin.html" target="_blank" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
-              Full Admin Page ↗
-            </a>
-          </div>
-        </div>
+  <!-- =========================================================
+       PHOTO LIGHTBOX
+  ========================================================== -->
 
-        <!-- Metrics -->
-        <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 20px;">
-          <div class="metric-card" style="padding: 14px;">
-            <div class="metric-num" id="mTotal" style="font-size: 1.8rem;">0</div>
-            <div class="metric-title" style="font-size: 0.7rem;">Submissions</div>
-          </div>
-          <div class="metric-card" style="padding: 14px;">
-            <div class="metric-num" id="mAttending" style="color: #2ecc71; font-size: 1.8rem;">0</div>
-            <div class="metric-title" style="font-size: 0.7rem;">Attending</div>
-          </div>
-          <div class="metric-card" style="padding: 14px;">
-            <div class="metric-num" id="mGpay" style="color: var(--gold-light); font-size: 1.8rem;">0</div>
-            <div class="metric-title" style="font-size: 0.7rem;">GPay</div>
-          </div>
-          <div class="metric-card" style="padding: 14px;">
-            <div class="metric-num" id="mCash" style="color: #3498db; font-size: 1.8rem;">0</div>
-            <div class="metric-title" style="font-size: 0.7rem;">Cash</div>
-          </div>
-        </div>
+  <div class="modal-overlay" id="photoLightbox">
 
-        <!-- Search -->
-        <div style="margin-bottom: 16px;">
-          <input type="text" id="modalSearchInput" class="form-control" placeholder="Search guest name or phone..." style="padding: 10px 14px; font-size: 0.85rem;">
-        </div>
+    <div class="photo-lightbox-card">
 
-        <!-- Table -->
-        <div class="table-wrapper" style="max-height: 320px; overflow-y: auto;">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Payment</th>
-                <th>Message</th>
-              </tr>
-            </thead>
-            <tbody id="modalRsvpTableBody">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No responses found.</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <button class="close-btn" id="closePhotoLightbox">
+        &times;
+      </button>
+
+
+      <img id="lightboxPhoto" src="" alt="Reunion Photo">
+
+
+      <div class="photo-lightbox-actions">
+
+        <a id="lightboxDownload" href="#" class="btn btn-primary" target="_blank" rel="noopener">
+          ⬇ Download Photo
+        </a>
+
       </div>
 
     </div>
+
   </div>
 
 </body>
+
 </html>
